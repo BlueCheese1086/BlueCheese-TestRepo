@@ -1,0 +1,189 @@
+Logger.getInstance().recordMetadata("ProjectName", "KitbotExample"); // Set a metadata value
+
+    if (isReal()) {
+      Logger.getInstance().addDataReceiver(new WPILOGWriter("/media/sda1/")); // Log to a USB stick
+      Logger.getInstance().addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
+      new PowerDistribution(1, ModuleType.kRev); // Enables power distribution logging
+    } else {
+      Logger.getInstance().addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
+    }
+
+    Logger.getInstance().start(); // Start logging! No more data receivers, replay sources, or metadata values may be added.
+
+package frc.robot.Subsystems.Drivetrain;
+
+public interface DrivetrainIO {}
+
+public static class DrivetrainIOInputs {}
+public static class DrivetrainIOInputs {
+    public double leftOutputVolts = 0.0;
+    public double rightOutputVolts = 0.0;
+}
+public static class DrivetrainIOInputs {
+    public double leftOutputVolts = 0.0;
+    public double rightOutputVolts = 0.0;
+
+    public double leftVelocityMetersPerSecond = 0.0;
+    public double rightVelocityMetersPerSecond = 0.0;
+}
+public abstract void updateInputs(DrivetrainIOInputs inputs);
+package frc.robot.Subsystems.Drivetrain;
+
+import org.littletonrobotics.junction.AutoLog;
+
+public interface DrivetrainIO {
+    @AutoLog
+    public static class DrivetrainIOInputs {
+        public double leftOutputVolts = 0.0;
+        public double rightOutputVolts = 0.0;
+
+        public double leftVelocityMetersPerSecond = 0.0;
+        public double rightVelocityMetersPerSecond = 0.0;
+
+        public double leftPositionMeters = 0.0;
+        public double rightPositionMeters = 0.0;
+
+        public double[] leftCurrentAmps = new double[0];
+        public double[] leftTempCelsius = new double[0];
+        public double[] rightCurrentAmps = new double[0];
+        public double[] rightTempCelsius = new double[0];
+    }
+
+    public abstract void updateInputs(DrivetrainIOInputs inputs);
+
+    public abstract void setVolts(double left, double right);
+}
+public class DrivetrainIOSim implements DrivetrainIO {}
+public class DrivetrainIOSim implements DrivetrainIO {
+
+    @Override
+    public void updateInputs(DrivetrainIOInputs inputs) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void setVolts(double left, double right) {
+        // TODO Auto-generated method stub
+
+    }
+}
+TalonFX leftFalcon = new TalonFX(Constants.drivetrainLeftFalconID);
+TalonFX rightFalcon = new TalonFX(Constants.drivetrainRightFalconID);
+@Override
+public void updateInputs(DrivetrainIOInputs inputs) {
+    public double leftOutputVolts = 0.0;
+    public double rightOutputVolts = 0.0;
+
+    public double leftVelocityMetersPerSecond = 0.0;
+    public double rightVelocityMetersPerSecond = 0.0;
+
+    public double leftPositionMeters = 0.0;
+    public double rightPositionMeters = 0.0;
+
+    public double[] leftCurrentAmps = new double[0];
+    public double[] leftTempCelsius = new double[0];
+    public double[] rightCurrentAmps = new double[0];
+    public double[] rightTempCelsius = new double[0];
+}
+@Override
+public void updateInputs(DrivetrainIOInputs inputs) {
+    inputs.leftOutputVolts = 0.0;
+    inputs.rightOutputVolts = 0.0;
+
+    inputs.leftVelocityMetersPerSecond = 0.0;
+    inputs.rightVelocityMetersPerSecond = 0.0;
+
+    inputs.leftPositionMeters = 0.0;
+    inputs.rightPositionMeters = 0.0;
+
+    inputs.leftCurrentAmps = new double[0];
+    inputs.leftTempCelsius = new double[0];
+    inputs.rightCurrentAmps = new double[0];
+    inputs.rightTempCelsius = new double[0];
+}
+@Override
+public void updateInputs(DrivetrainIOInputs inputs) {
+    var leftSimState = leftFalcon.getSimState();
+    var rightSimState = rightFalcon.getSimState();
+    // Snip
+}
+@Override
+public void updateInputs(DrivetrainIOInputs inputs) {
+    // Snip
+    inputs.leftOutputVolts = leftSimState.getMotorVoltage();
+    inputs.rightOutputVolts = rightSimState.getMotorVoltage();
+    // Snip
+}
+@Override
+public void updateInputs(DrivetrainIOInputs inputs) {
+    // Snip
+    inputs.leftCurrentAmps = new double[] {leftSimState.getTorqueCurrent()};
+    inputs.leftTempCelsius = new double[0];
+    inputs.rightCurrentAmps = new double[] {rightSimState.getTorqueCurrent()};
+    inputs.rightTempCelsius = new double[0];
+}
+@Override
+public void updateInputs(DrivetrainIOInputs inputs) {
+    // Snip
+    inputs.leftCurrentAmps = new double[] {leftSimState.getTorqueCurrent()};
+    inputs.leftTempCelsius = new double[0];
+    inputs.rightCurrentAmps = new double[] {rightSimState.getTorqueCurrent()};
+    inputs.rightTempCelsius = new double[0];
+}
+TalonFX leftFalcon = new TalonFX(Constants.drivetrainLeftFalconID);
+TalonFX rightFalcon = new TalonFX(Constants.drivetrainRightFalconID);
+
+VoltageOut leftVoltage = new VoltageOut(0);
+VoltageOut rightVoltage = new VoltageOut(0);
+@Override
+public void setVolts(double left, double right) {
+    leftFalcon.setControl(leftVoltage.withOutput(left));
+    rightFalcon.setControl(rightVoltage.withOutput(right));
+}
+DifferentialDrivetrainSim physicsSim = DifferentialDrivetrainSim.createKitbotSim(
+    null,
+    null,
+    null,
+    null);
+@Override
+public void periodic() {
+io.updateInputs(inputs);
+Logger.getInstance().processInputs("Drivetrain", inputs);
+
+odometry.update(
+    odometry.getPoseMeters().getRotation()
+        // Use differential drive kinematics to find the rotation rate based on the wheel speeds and distance between wheels
+        .plus(Rotation2d.fromRadians((inputs.leftVelocityMetersPerSecond - inputs.rightVelocityMetersPerSecond)
+            * 0.020 / Units.inchesToMeters(26))),
+    inputs.leftPositionMeters, inputs.rightPositionMeters);
+}
+@Override
+public void periodic() {
+    // Snip
+    Logger.getInstance().recordOutput("Drivebase Pose", odometry.getPoseMeters());
+}
+odometry.getPoseMeters().getRotation()
+    .plus(
+        Rotation2d.fromRadians(
+            (inputs.leftSpeedMetersPerSecond - inputs.rightSpeedMetersPerSecond)
+             * 0.020 / Units.inchesToMeters(26)))
+public class DrivetrainSubsystem extends SubsystemBase {
+  DrivetrainIO io = new DrivetrainIOSim();
+  DrivetrainIOInputsAutoLogged inputs = new DrivetrainIOInputsAutoLogged();
+
+  DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(new Rotation2d(), 0, 0);
+  // Snip
+}
+private void setVoltages(double left, double right) {
+    io.setVolts(left, right);
+}
+@Override
+public void periodic() {
+    io.updateInputs(inputs);
+    Logger.getInstance().processInputs("Drivetrain", inputs);
+}
+@Override
+public void periodic() {
+    io.updateInputs(inputs);
+}
